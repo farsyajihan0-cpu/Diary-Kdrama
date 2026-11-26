@@ -1,0 +1,413 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My K-Drama Diary</title>
+
+<style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: #fff5f8;
+  color: #493542;
+  padding: 25px;
+}
+
+.container {
+  max-width: 950px;
+  margin: auto;
+}
+
+header {
+  text-align: center;
+  padding: 35px 15px;
+  background: linear-gradient(135deg, #f5c9da, #e8c9ef);
+  border-radius: 25px;
+  margin-bottom: 25px;
+}
+
+header h1 {
+  font-size: 34px;
+  margin-bottom: 8px;
+}
+
+header p {
+  color: #755b70;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 25px;
+}
+
+.stat {
+  background: white;
+  padding: 20px;
+  border-radius: 18px;
+  text-align: center;
+  box-shadow: 0 3px 12px #e9d6e0;
+}
+
+.stat h2 {
+  color: #ce82a5;
+  font-size: 26px;
+}
+
+.stat p {
+  font-size: 13px;
+}
+
+.progress-box {
+  background: white;
+  padding: 20px;
+  border-radius: 18px;
+  margin-bottom: 25px;
+}
+
+.progress {
+  height: 12px;
+  background: #f3e4eb;
+  border-radius: 20px;
+  margin-top: 12px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  background: #d78eaf;
+  transition: .3s;
+}
+
+.form-box {
+  background: white;
+  padding: 22px;
+  border-radius: 20px;
+  margin-bottom: 25px;
+}
+
+input, select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ead4df;
+  border-radius: 10px;
+  margin: 8px 0;
+  outline: none;
+  background: #fffafd;
+  color: #493542;
+}
+
+button {
+  border: none;
+  padding: 11px 17px;
+  border-radius: 10px;
+  background: #d78eaf;
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+button:hover {
+  opacity: .8;
+}
+
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.tabs button {
+  background: white;
+  color: #a36c89;
+  border: 1px solid #ebd3df;
+}
+
+.tabs button.active {
+  background: #d78eaf;
+  color: white;
+}
+
+.drama-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 15px;
+}
+
+.drama {
+  background: white;
+  padding: 20px;
+  border-radius: 18px;
+  box-shadow: 0 3px 12px #ead9e1;
+}
+
+.drama h3 {
+  margin-bottom: 8px;
+}
+
+.drama .genre {
+  font-size: 13px;
+  color: #a17c91;
+  margin-bottom: 12px;
+}
+
+.status {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 20px;
+  background: #f9e4ed;
+  font-size: 12px;
+  margin-bottom: 12px;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 15px;
+}
+
+.actions button {
+  flex: 1;
+  font-size: 12px;
+}
+
+.delete {
+  background: #b98d9d;
+}
+
+.empty {
+  text-align: center;
+  padding: 35px;
+  color: #a17c91;
+  grid-column: 1 / -1;
+}
+
+footer {
+  text-align: center;
+  padding: 30px;
+  color: #a17c91;
+  font-size: 13px;
+}
+
+@media(max-width: 500px) {
+  body { padding: 13px; }
+  header h1 { font-size: 27px; }
+  .stat { padding: 13px 5px; }
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<header>
+  <h1>♡ My K-Drama Diary</h1>
+  <p>Your little space to keep every Korean drama memory.</p>
+</header>
+
+<div class="stats">
+  <div class="stat">
+    <h2 id="total">0</h2>
+    <p>Total Dramas</p>
+  </div>
+  <div class="stat">
+    <h2 id="watching">0</h2>
+    <p>Watching</p>
+  </div>
+  <div class="stat">
+    <h2 id="completed">0</h2>
+    <p>Completed</p>
+  </div>
+</div>
+
+<div class="progress-box">
+  <h3>My Watching Progress ♡</h3>
+  <div id="progressText">0% completed</div>
+  <div class="progress">
+    <div class="progress-fill" id="progressFill"></div>
+  </div>
+</div>
+
+<div class="form-box">
+  <h3>＋ Add New Drama</h3>
+  <input id="title" placeholder="Drama title...">
+  <input id="genre" placeholder="Genre (Romance, Thriller, Comedy...)">
+  <select id="statusInput">
+    <option value="Want to Watch">Want to Watch</option>
+    <option value="Watching">Watching</option>
+    <option value="Completed">Completed</option>
+  </select>
+  <select id="rating">
+    <option value="Not rated">Not rated</option>
+    <option value="⭐ 1/5">⭐ 1/5</option>
+    <option value="⭐⭐ 2/5">⭐⭐ 2/5</option>
+    <option value="⭐⭐⭐ 3/5">⭐⭐⭐ 3/5</option>
+    <option value="⭐⭐⭐⭐ 4/5">⭐⭐⭐⭐ 4/5</option>
+    <option value="⭐⭐⭐⭐⭐ 5/5">⭐⭐⭐⭐⭐ 5/5</option>
+  </select>
+  <button onclick="addDrama()">Add to My List ♡</button>
+</div>
+
+<div class="tabs">
+  <button class="active" onclick="filterDrama('All', this)">All</button>
+  <button onclick="filterDrama('Want to Watch', this)">Want to Watch</button>
+  <button onclick="filterDrama('Watching', this)">Watching</button>
+  <button onclick="filterDrama('Completed', this)">Completed</button>
+</div>
+
+<div class="drama-list" id="dramaList"></div>
+
+<footer>
+  Made with ♡ for K-drama lovers
+  <br>My K-Drama Diary © 2026
+</footer>
+
+</div>
+
+<script>
+let dramas = JSON.parse(
+  localStorage.getItem("myDramas") || "[]"
+);
+
+let currentFilter = "All";
+
+function save() {
+  localStorage.setItem("myDramas", JSON.stringify(dramas));
+}
+
+function addDrama() {
+  const title = document.getElementById("title").value.trim();
+  const genre = document.getElementById("genre").value.trim();
+  const status = document.getElementById("statusInput").value;
+  const rating = document.getElementById("rating").value;
+
+  if (!title) {
+    alert("Masukkan judul drakor dulu!");
+    return;
+  }
+
+  dramas.push({
+    id: Date.now(),
+    title,
+    genre: genre || "Unspecified",
+    status,
+    rating
+  });
+
+  save();
+  document.getElementById("title").value = "";
+  document.getElementById("genre").value = "";
+  document.getElementById("rating").value = "Not rated";
+
+  render();
+}
+
+function changeStatus(id) {
+  const drama = dramas.find(d => d.id === id);
+
+  if (drama.status === "Want to Watch") {
+    drama.status = "Watching";
+  } else if (drama.status === "Watching") {
+    drama.status = "Completed";
+  } else {
+    drama.status = "Want to Watch";
+  }
+
+  save();
+  render();
+}
+
+function deleteDrama(id) {
+  if (confirm("Hapus drama ini dari daftar?")) {
+    dramas = dramas.filter(d => d.id !== id);
+    save();
+    render();
+  }
+}
+
+function filterDrama(filter, button) {
+  currentFilter = filter;
+
+  document.querySelectorAll(".tabs button")
+    .forEach(btn => btn.classList.remove("active"));
+
+  button.classList.add("active");
+  render();
+}
+
+function render() {
+  const list = document.getElementById("dramaList");
+
+  const total = dramas.length;
+  const watching = dramas.filter(d => d.status === "Watching").length;
+  const completed = dramas.filter(d => d.status === "Completed").length;
+
+  document.getElementById("total").textContent = total;
+  document.getElementById("watching").textContent = watching;
+  document.getElementById("completed").textContent = completed;
+
+  const percent = total ? Math.round(completed / total * 100) : 0;
+
+  document.getElementById("progressText").textContent =
+    percent + "% completed";
+
+  document.getElementById("progressFill").style.width =
+    percent + "%";
+
+  const filtered = currentFilter === "All"
+    ? dramas
+    : dramas.filter(d => d.status === currentFilter);
+
+  if (filtered.length === 0) {
+    list.innerHTML = `
+      <div class="empty">
+        <h3>♡ No dramas yet!</h3>
+        <p>Your next favorite K-drama starts here.</p>
+      </div>`;
+    return;
+  }
+
+  list.innerHTML = filtered.map(d => `
+    <div class="drama">
+      <h3>${escapeHTML(d.title)}</h3>
+      <p class="genre">${escapeHTML(d.genre)}</p>
+      <span class="status">${escapeHTML(d.status)}</span>
+      <p>Rating: ${escapeHTML(d.rating)}</p>
+
+      <div class="actions">
+        <button onclick="changeStatus(${d.id})">
+          Next Status →
+        </button>
+        <button class="delete" onclick="deleteDrama(${d.id})">
+          Delete
+        </button>
+      </div>
+    </div>
+  `).join("");
+}
+
+function escapeHTML(value) {
+  return String(value).replace(/[&<>"']/g, char => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  })[char]);
+}
+
+render();
+</script>
+
+</body>
+</html>
